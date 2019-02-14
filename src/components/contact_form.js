@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Field from './field';
 
 class ContactForm extends Component{
     constructor(props){
@@ -6,9 +7,21 @@ class ContactForm extends Component{
         this.state={
             form:{
                 firstName:'',
-                lastName:''
+                lastName:'',
+                phone:'',
+                email:''
             }
         }
+    }
+    reset=()=>{
+        this.setState({
+            form:{
+                firstName:'',
+                lastName:'',
+                phone:'',
+                email:''
+            }
+        });
     }
     handleInputChange=(event)=>{
         const {value, name}=event.target;
@@ -18,19 +31,19 @@ class ContactForm extends Component{
     }
     handleSubmit=(event)=>{
         event.preventDefault();
-        console.log(this.state.form)
+        this.props.add(this.state.form);
+        this.reset();
     }
     render(){
-        const {firstName, lastName}=this.state.form;
+        const {firstName, lastName,phone,email}=this.state.form;
         return(
             <form onSubmit={this.handleSubmit}>
-                <div className="form-group">
-                    <label>First Name</label>
-                    <input value={firstName} onChange={this.handleInputChange} type="text" name="firstName" type='text' className="form-control"/>
-                    <label>Last Name</label>
-                    <input value={lastName} onChange={this.handleInputChange} type="text" name="lastName" type='text' className="form-control"/>
-                </div>
+                <Field onChange={this.handleInputChange} name="firstName" label="First Name" type='text' value={firstName}/>
+                <Field onChange={this.handleInputChange} name="lastName" label="Last Name" type='text' value={lastName}/>
+                <Field onChange={this.handleInputChange} name="phone" label="Phone Number" type='tel' value={phone}/>
+                <Field onChange={this.handleInputChange} name="email" label="Email" type='email' value={email}/>
                 <button>Add Contact</button>
+                <button type="button" onClick={this.reset}>Reset</button>
             </form>
         );
     }
